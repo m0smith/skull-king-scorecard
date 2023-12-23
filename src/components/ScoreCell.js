@@ -17,22 +17,13 @@ const ScoreCell = ({ round, playerIndex, bid, tricks, total, updateScore }) => {
 
   const [score , setScore] = useState(computeScore(round, _bid, _tricks))
 
-
-  const handleBidChange = (event) => {
-    updateScore(playerIndex, round, 'bid', event.target.value);
-  };
-
-  const handleTrickChange = (event) => {
-    updateScore(playerIndex, round, 'trick', event.target.value);
-  };
-
   // Additional functions to handle score and total updates can be added here
 
   useEffect(() => {
     const newScore = computeScore(round, _bid, _tricks)
     console.log(newScore)
     setScore(newScore)
-  }, [_bid, _tricks])
+  }, [_bid, _tricks, round])
 
   return (
     <Box display="flex" flexDirection="column">
