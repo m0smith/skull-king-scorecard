@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/skull-king-scorecard/static/css/main.d6b776c8.css",
+    "main.js": "/skull-king-scorecard/static/js/main.e1a8f56a.js",
+    "static/js/787.0c817518.chunk.js": "/skull-king-scorecard/static/js/787.0c817518.chunk.js",
+    "static/media/logo.png": "/skull-king-scorecard/static/media/logo.65c157a3c5b971c52245.png",
+    "index.html": "/skull-king-scorecard/index.html",
+    "main.d6b776c8.css.map": "/skull-king-scorecard/static/css/main.d6b776c8.css.map",
+    "main.e1a8f56a.js.map": "/skull-king-scorecard/static/js/main.e1a8f56a.js.map",
+    "787.0c817518.chunk.js.map": "/skull-king-scorecard/static/js/787.0c817518.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.d6b776c8.css",
+    "static/js/main.e1a8f56a.js"
+  ]
+}
