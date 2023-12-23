@@ -1,13 +1,22 @@
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
+import PlayerInfo from './PlayerInfo';
+import ScoreCell from './ScoreCell';
 
-const Scorecard = () => {
-  const [playerNames, setPlayerNames] = useState(['Player 1', 'Player 2', 'Player 3', 'Player 4', 'Player 5', 'Player 6']);
+const range = (size) => Array.from(Array(size).keys())
+
+const PLAYERS = range(6).map((i) => ({
+  name: `Player ${++i}`,
+  score: null
+}))
   
-  const handleNameChange = (index, event) => {
-    const newNames = [...playerNames];
-    newNames[index] = event.target.value;
-    setPlayerNames(newNames);
+const Scorecard = () => {
+  const [playersInfo, setPlayersInfo] = useState(PLAYERS);
+  
+  const handleNameChange = (index, name) => {
+    const newPlayersInfo = [...playersInfo];
+    newPlayersInfo[index].name = name;
+    setPlayersInfo(newPlayersInfo);
   };
 
   return (
@@ -16,27 +25,25 @@ const Scorecard = () => {
         <TableHead>
           <TableRow>
             <TableCell>Round</TableCell>
-            {playerNames.map((name, index) => (
+            {playersInfo.map((info, index) => (
               <TableCell key={index}>
-                <TextField 
-                  value={name} 
-                  onChange={(e) => handleNameChange(index, e)} 
-                  variant="standard" 
-                  fullWidth
-                />
+                <PlayerInfo info={info} index={index}  onNameChange={handleNameChange}/>
               </TableCell>
             ))}
           </TableRow>
         </TableHead>
         <TableBody>
-          {[...Array(10)].map((_, round) => (
+          {range(10).map((_, round) => (
             <TableRow key={round}>
               <TableCell component="th" scope="row">
                 {round + 1}
               </TableCell>
-              {playerNames.map((_, index) => (
+              {playersInfo.map((_, index) => (
                 <TableCell key={index}>
-                  {/* Add your bid, tricks, score, and running total fields here */}
+                 <ScoreCell round={round} playerIndex={index}
+                            bid={null} trick={null} score={null} total={null} 
+
+                            updateScore={() => {console.log('hi')}} />
                 </TableCell>
               ))}
             </TableRow>
