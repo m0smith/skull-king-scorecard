@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { TextField, Box } from '@mui/material'
 import { computeScore, computeSubtotal } from '../common'
 
-const SCORE_MULTIPLIER = 20;
-const PENALTY_MULTIPLIER = -10;
 
 
-const ScoreCell = ({ round, playerIndex, info,  updateScore }) => {
+const ScoreCell = ({ round, playerIndex, info, updateScore }) => {
   const boxRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   const [_bid, setBid] = useState(info.scores[round].bid)

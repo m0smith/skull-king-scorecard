@@ -39,7 +39,7 @@ function copyPlayersInfo(playerInfoArray) {
   
 const Scorecard = ({key}) => {
   const [playersInfo, setPlayersInfo] = useState(loadGameInfo() || PLAYERS);
-  const [_, setParentKey] = useState(key)
+  // const [_, setParentKey] = useState(key)
   
   const handleNameChange = (index, name) => {
     const newPlayersInfo = copyPlayersInfo(playersInfo);
