@@ -22,7 +22,7 @@ export const computeScore = (round, bid, tricks) => {
 
 export function computeSubtotal(playerInfo, round) {
     const rtnval = playerInfo.scores.slice(0, round + 1).reduce((accumulator, currentScore) => {
-        const score = computeScore(round, currentScore.bid, currentScore.tricks)
+        const score = computeScore(currentScore.round, currentScore.bid, currentScore.tricks)
         if (score === null || isNaN(score))
             return accumulator;
         else

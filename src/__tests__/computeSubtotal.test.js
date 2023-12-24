@@ -1,4 +1,6 @@
-import { computeSubtotal,computeScore } from '../common';
+// import { computeSubtotal,computeScore } from '../common';
+const { computeSubtotal, computeScore } = require('../common');
+
 
 describe('computeSubtotal', () => {
   it('should return 0 for empty scores', () => {
@@ -15,7 +17,7 @@ describe('computeSubtotal', () => {
       ]
     };
     const round = 1;
-    const expectedSubtotal = computeScore(round, 2, 2) + computeScore(round, 1, 3);
+    const expectedSubtotal = computeScore(0, 2, 2) + computeScore(1, 1, 3);
     expect(computeSubtotal(playerInfo, round)).toEqual(expectedSubtotal);
   });
 
@@ -33,11 +35,12 @@ describe('computeSubtotal', () => {
   it('should handle rounds beyond the scores length', () => {
     const playerInfo = {
       scores: [
-        { bid: 2, tricks: 2 }
+        { bid: 2, tricks: 2, round: 0}
       ]
     };
     const round = 3; // more than the length of scores
     const expectedSubtotal = computeScore(0, 2, 2); // Only the first score is valid
+
     expect(computeSubtotal(playerInfo, round)).toEqual(expectedSubtotal);
   });
 
