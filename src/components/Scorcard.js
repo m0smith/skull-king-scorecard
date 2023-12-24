@@ -5,19 +5,36 @@ import ScoreCell from './ScoreCell';
 
 const range = (size) => Array.from(Array(size).keys())
 
+
+
 const PLAYERS = range(6).map((i) => ({
   name: `Player ${++i}`,
-  score: null
-}))
+  scores: Array(10)}))
+
+function copyPlayersInfo(playerInfoArray) {
+  return playerInfoArray.map(playerInfo => {
+    return {
+      name: playerInfo.name,
+      scores: [...playerInfo.scores]
+    };
+  });
+}
   
 const Scorecard = () => {
   const [playersInfo, setPlayersInfo] = useState(PLAYERS);
   
   const handleNameChange = (index, name) => {
-    const newPlayersInfo = [...playersInfo];
+    const newPlayersInfo = copyPlayersInfo(playersInfo);
     newPlayersInfo[index].name = name;
     setPlayersInfo(newPlayersInfo);
   };
+
+  const handleScoreChange = (player, round, score) => {
+    const newPlayersInfo = copyPlayersInfo(playersInfo);
+    newPlayersInfo[player].scores[round] = score;
+    console.log(newPlayersInfo[player])
+    setPlayersInfo(newPlayersInfo)
+  }
 
   return (
     <TableContainer component={Paper}>
@@ -38,12 +55,11 @@ const Scorecard = () => {
               <TableCell component="th" scope="row">
                 {round + 1}
               </TableCell>
-              {playersInfo.map((_, index) => (
+              {playersInfo.map((info, index) => (
                 <TableCell key={index}>
-                 <ScoreCell round={round} playerIndex={index}
+                 <ScoreCell round={round} playerIndex={index} info={info}
                             bid={null} trick={null} score={null} total={null} 
-
-                            updateScore={() => {console.log('hi')}} />
+                            updateScore={handleScoreChange} />
                 </TableCell>
               ))}
             </TableRow>
