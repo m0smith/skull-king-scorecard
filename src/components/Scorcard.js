@@ -1,27 +1,45 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PlayerInfo from './PlayerInfo';
 import ScoreCell from './ScoreCell';
-
-const range = (size) => Array.from(Array(size).keys())
-
+import {range, PROJECT_NAME} from '../common'
 
 
-const PLAYERS = range(6).map((i) => ({
+
+const loadGameInfo = () => {
+  return JSON.parse(localStorage.getItem(PROJECT_NAME));
+}
+
+const DEFAULT_ROUNDS = 10
+const DEFAULT_PLAYERS = 6
+
+const scoresArray = (n) => Array.from({ length: n}, (_, index) => ({
+  bid: null,
+  tricks: null,
+  round: index
+}));
+
+
+const PLAYERS = range(DEFAULT_PLAYERS).map((i) => ({
   name: `Player ${++i}`,
-  scores: Array(10)}))
+  scores: scoresArray(DEFAULT_ROUNDS)}))
 
 function copyPlayersInfo(playerInfoArray) {
   return playerInfoArray.map(playerInfo => {
     return {
       name: playerInfo.name,
-      scores: [...playerInfo.scores]
+      scores: playerInfo.scores.map(score => ({
+        bid: score?.bid,
+        tricks: score?.tricks,
+        round: score?.round
+      }))
     };
   });
 }
   
-const Scorecard = () => {
-  const [playersInfo, setPlayersInfo] = useState(PLAYERS);
+const Scorecard = ({key}) => {
+  const [playersInfo, setPlayersInfo] = useState(loadGameInfo() || PLAYERS);
+  const [_, setParentKey] = useState(key)
   
   const handleNameChange = (index, name) => {
     const newPlayersInfo = copyPlayersInfo(playersInfo);
@@ -29,12 +47,18 @@ const Scorecard = () => {
     setPlayersInfo(newPlayersInfo);
   };
 
-  const handleScoreChange = (player, round, score) => {
+  const handleScoreChange = (player, round, bid, tricks) => {
     const newPlayersInfo = copyPlayersInfo(playersInfo);
-    newPlayersInfo[player].scores[round] = score;
+    newPlayersInfo[player].scores[round] = {
+      bid, tricks, round
+    }
     console.log(newPlayersInfo[player])
     setPlayersInfo(newPlayersInfo)
   }
+
+  useEffect(()=> {
+    localStorage.setItem(PROJECT_NAME, JSON.stringify(playersInfo));
+  }, [playersInfo])
 
   return (
     <TableContainer component={Paper}>
@@ -50,7 +74,7 @@ const Scorecard = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {range(10).map((_, round) => (
+          {range(DEFAULT_ROUNDS).map((_, round) => (
             <TableRow key={round}>
               <TableCell component="th" scope="row">
                 {round + 1}
@@ -58,7 +82,6 @@ const Scorecard = () => {
               {playersInfo.map((info, index) => (
                 <TableCell key={index}>
                  <ScoreCell round={round} playerIndex={index} info={info}
-                            bid={null} trick={null} score={null} total={null} 
                             updateScore={handleScoreChange} />
                 </TableCell>
               ))}

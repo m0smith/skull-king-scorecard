@@ -1,44 +1,27 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { TextField, Box } from '@mui/material';
+import { TextField, Box } from '@mui/material'
+import { computeScore, computeSubtotal } from '../common'
 
-const computeScore = (round, bid, tricks) => {
-  if (!isNaN(bid) && !isNaN(tricks) > 0) {
-    if (bid === tricks) {
-      return ((round + 1) * 20)
-    } else {
-      return (Math.abs(bid - tricks) * -10)
-    }
-  }
-}
-
-function computeSubtotal(playerInfo, round) {
-  const rtnval = playerInfo.scores.slice(0, round + 1).reduce((accumulator, currentScore) => {
-      if (isNaN(currentScore))
-          return accumulator;
-      else
-          return accumulator + currentScore
-  }, 0)
-  return rtnval
-}
+const SCORE_MULTIPLIER = 20;
+const PENALTY_MULTIPLIER = -10;
 
 
-const ScoreCell = ({ round, playerIndex, info,  bid, tricks, total, updateScore }) => {
+const ScoreCell = ({ round, playerIndex, info,  updateScore }) => {
   const boxRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
-  const [_bid, setBid] = useState(bid)
-  const [_tricks, setTricks] = useState(tricks)
-
-  const [score, setScore] = useState(computeScore(round, _bid, _tricks))
+  const [_bid, setBid] = useState(info.scores[round].bid)
+  const [_tricks, setTricks] = useState(info.scores[round].tricks)
 
 
 
-  const handleBlur = (event) => {
+
+  const handleBlur = () => {
     // Delay checking for the blur event to allow time for focus to potentially shift to a new element
     setTimeout(() => {
       // Check if the newly focused element is outside the box
       if (boxRef.current && !boxRef.current.contains(document.activeElement)) {
         setIsFocused(false); // Focus has moved outside the box
-        updateScore(playerIndex, round, score)
+        updateScore(playerIndex, round, _bid, _tricks)
       }
     }, 0);
   };
@@ -47,11 +30,6 @@ const ScoreCell = ({ round, playerIndex, info,  bid, tricks, total, updateScore 
     setIsFocused(true); // Focus is within the box
   };
 
-  useEffect(() => {
-    const newScore = computeScore(round, _bid, _tricks)
-    console.log(newScore)
-    setScore(newScore)
-  }, [_bid, _tricks, round])
 
   return (
     <Box display="flex"
@@ -70,7 +48,7 @@ const ScoreCell = ({ round, playerIndex, info,  bid, tricks, total, updateScore 
           }}
           variant="standard"
           value={_bid}
-          onChange={(e) => setBid(e.target.value)}
+          onChange={(e) => setBid(Number(e.target.value))}
         />
         <TextField
           label="Tricks"
@@ -80,7 +58,7 @@ const ScoreCell = ({ round, playerIndex, info,  bid, tricks, total, updateScore 
           }}
           variant="standard"
           value={_tricks}
-          onChange={(e) => setTricks(e.target.value)}
+          onChange={(e) => setTricks(Number(e.target.value))}
         />
       </Box>
       <Box display="flex">
@@ -91,7 +69,7 @@ const ScoreCell = ({ round, playerIndex, info,  bid, tricks, total, updateScore 
             shrink: true,
           }}
           variant="standard"
-          value={score}
+          value={computeScore(round, _bid, _tricks)}
           disabled
         />
         <TextField

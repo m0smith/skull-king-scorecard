@@ -1,15 +1,7 @@
 import { Box, TextField } from "@mui/material"
 import { useState } from "react"
+import { computeSubtotal } from '../common'
 
-function sumScores(playerInfo) {
-    const rtnval = playerInfo.scores.reduce((accumulator, currentScore) => {
-        if (isNaN(currentScore))
-            return accumulator;
-        else
-            return accumulator + currentScore
-    }, 0)
-    return rtnval
-}
 
 const PlayerInfo = ({ info, index, onNameChange }) => {
     const [tempName, setTempName] = useState(info.name)
@@ -33,7 +25,7 @@ const PlayerInfo = ({ info, index, onNameChange }) => {
                 fullWidth
             />
             <TextField
-                value={sumScores(info)}
+                value={computeSubtotal(info, info.scores.length)}
                 variant="standard"
                 disabled
                 fullWidth
